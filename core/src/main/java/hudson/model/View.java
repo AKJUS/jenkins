@@ -95,6 +95,7 @@ import jenkins.model.ModelObjectWithContextMenu;
 import jenkins.model.item_category.Categories;
 import jenkins.model.item_category.Category;
 import jenkins.model.item_category.ItemCategory;
+import jenkins.search.SearchGroup;
 import jenkins.security.ExtendedReadRedaction;
 import jenkins.security.stapler.StaplerNotDispatchable;
 import jenkins.util.xml.XMLUtils;
@@ -567,20 +568,16 @@ public abstract class View extends AbstractModelObject implements AccessControll
         return "symbol-jobs";
     }
 
+    @Override
+    public SearchGroup getSearchGroup() {
+        return SearchGroup.get(SearchGroup.ViewSearchGroup.class);
+    }
+
     /**
      * Returns the transient {@link Action}s associated with the top page.
-     *
-     * <p>
-     * If views don't want to show top-level actions, this method
-     * can be overridden to return different objects.
-     *
-     * @see Jenkins#getActions()
      */
     public List<Action> getActions() {
-        List<Action> result = new ArrayList<>();
-        result.addAll(getOwner().getViewActions());
-        result.addAll(TransientViewActionFactory.createAllFor(this));
-        return result;
+        return TransientViewActionFactory.createAllFor(this);
     }
 
     /**

@@ -13,10 +13,6 @@
     padding: 0 0.25rem 0 calc(var(--search-bar-height) * 0.9);
     height: var(--search-bar-height);
 
-    &::placeholder {
-      color: var(--text-color-secondary);
-    }
-
     // Safari adds unwanted padding - let's remove it
     &::-webkit-search-decoration {
       -webkit-appearance: none;
@@ -150,7 +146,7 @@
   }
 
   &--app-bar {
-    --search-bar-height: 3rem;
+    --search-bar-height: 2.875rem;
 
     width: 100%;
     margin-block: -5px;
@@ -210,7 +206,7 @@
   height: 1px; // Setting to 0 caused the items not to render initially in Chrome
   opacity: 0;
   transition: var(--standard-transition);
-  background: color-mix(in sRGB, var(--background) 85%, transparent);
+  background: color-mix(in sRGB, var(--card-background) 85%, transparent);
   backdrop-filter: var(--dropdown-backdrop-filter);
   visibility: collapse;
   scale: 95%;

@@ -4,10 +4,11 @@
 $background-outset: 0.7rem;
 
 #tasks,
+.tasks,
 .subtasks {
   display: flex;
   flex-direction: column;
-  margin: var(--section-padding);
+  margin: 0 var(--section-padding) var(--section-padding) var(--section-padding);
   gap: 0.125rem;
 
   @media (min-width: breakpoints.$tablet-breakpoint) {
@@ -26,15 +27,12 @@ $background-outset: 0.7rem;
 
 #side-panel {
   .jenkins-app-bar {
-    margin-top: var(--section-padding);
     margin-left: var(--section-padding);
     margin-right: var(--section-padding);
   }
 
   & > #tasks > .jenkins-search-container {
-    margin-left: -$background-outset;
-    margin-right: -$background-outset;
-    margin-bottom: calc(var(--section-padding) / 2);
+    margin: 0 #{-$background-outset} 1rem;
 
     .jenkins-search__icon {
       width: 2.8rem;
@@ -47,72 +45,71 @@ $background-outset: 0.7rem;
   }
 }
 
-#side-panel .jenkins-search__results-container--visible .task-link {
-  opacity: 0.3;
-}
+#tasks,
+.tasks {
+  .task {
+    margin: 0 calc($background-outset * -1);
 
-#tasks .task {
-  margin: 0 calc($background-outset * -1);
-}
+    .task-link {
+      @include mixins.item;
 
-#tasks .task .task-link {
-  @include mixins.item;
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0.5rem $background-outset;
-  gap: 0.65rem;
-  width: 100%;
-  font-size: var(--font-size-sm);
-  color: var(--text-color);
-  margin: 0;
-  transition: opacity var(--standard-transition);
-
-  .task-icon-link {
-    display: inline-flex;
-
-    svg,
-    img {
-      width: 1.375rem !important;
-      height: 1.375rem !important;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0.5rem $background-outset;
+      gap: 0.65rem;
+      width: 100%;
+      font-size: var(--font-size-sm);
       color: var(--text-color);
+      margin: 0;
+      transition: opacity var(--standard-transition);
 
-      * {
-        transition: stroke-width var(--standard-transition);
+      .task-icon-link {
+        display: inline-flex;
+
+        svg,
+        img {
+          width: 1.375rem !important;
+          height: 1.375rem !important;
+          color: var(--text-color);
+
+          * {
+            transition: stroke-width var(--standard-transition);
+          }
+        }
       }
-    }
-  }
 
-  .task-icon-badge {
-    margin-left: auto;
-  }
+      .task-icon-badge {
+        margin-left: auto;
+      }
 
-  .task-link-text {
-    display: contents;
-    word-break: break-word;
-  }
+      .task-link-text {
+        display: contents;
+        word-break: word-break;
+      }
 
-  &--active {
-    font-weight: 450;
-    cursor: default;
+      &--active {
+        font-weight: 450;
+        cursor: default;
 
-    svg * {
-      stroke-width: 35px;
-    }
+        svg * {
+          stroke-width: 35px;
+        }
 
-    &::before {
-      background-color: var(--item-background--active) !important;
-    }
+        &::before {
+          background-color: var(--item-background--active) !important;
+        }
 
-    &::after {
-      box-shadow: none !important;
-    }
-  }
+        &::after {
+          box-shadow: none !important;
+        }
+      }
 
-  &:not(:hover, &:active, &:focus, &--active) {
-    &::before {
-      border-color: transparent;
+      &:not(:hover, &:active, &:focus, &--active) {
+        &::before {
+          border-color: transparent;
+        }
+      }
     }
   }
 }

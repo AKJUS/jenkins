@@ -363,6 +363,7 @@ public abstract class PluginManager extends AbstractModelObject implements OnMas
      * This is used to report a message that Jenkins needs to be restarted
      * for new plugins to take effect.
      */
+    @SuppressFBWarnings(value = "PA_PUBLIC_PRIMITIVE_ATTRIBUTE", justification = "Preserve API compatibility")
     public volatile boolean pluginUploaded = false;
 
     /**
@@ -1556,6 +1557,10 @@ public abstract class PluginManager extends AbstractModelObject implements OnMas
                         releaseTimestamp.put("displayValue", Messages.PluginManager_ago(Functions.getTimeSpanString(plugin.releaseTimestamp)));
                         jsonObject.put("releaseTimestamp", releaseTimestamp);
                     }
+                    if (plugin.healthScore != null) {
+                        jsonObject.put("healthScore", plugin.healthScore);
+                        jsonObject.put("healthScoreClass", plugin.healthScoreClass);
+                    }
                     return jsonObject;
                 })
                 .collect(toList());
@@ -1865,11 +1870,7 @@ public abstract class PluginManager extends AbstractModelObject implements OnMas
 
         @Override
         public void copy(File target) throws IOException {
-            try {
-                fileItem.write(Util.fileToPath(target));
-            } catch (UncheckedIOException e) {
-                throw e.getCause();
-            }
+            fileItem.write(Util.fileToPath(target));
         }
 
         @Override

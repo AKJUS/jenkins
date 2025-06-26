@@ -48,6 +48,12 @@
   --button-background--active: oklch(from currentColor l c h / 0.25);
   --button-box-shadow--focus: oklch(from currentColor l c h / 0.125);
 
+  &:not(.jenkins-button--primary) {
+    &::before {
+      border: var(--jenkins-border--inherit-subtle);
+    }
+  }
+
   color: var(--color) !important;
 }
 
@@ -63,7 +69,13 @@
 .jenkins-button--tertiary {
   --button-background: transparent !important;
 
-  &:not(:hover, &:active, &:focus) {
+  &:not(
+      :hover,
+      &:active,
+      &:focus,
+      &[aria-describedby],
+      &[aria-expanded="true"]
+    ) {
     &::before {
       border-color: transparent;
     }

@@ -14,7 +14,7 @@ $colors: (
   "yellow": oklch(80% 0.17 76),
   "teal": oklch(60% 0.1122 216.72),
   "white": #fff,
-  "black": oklch(from var(--accent-color) 2% 0.075 h),
+  "black": oklch(from var(--accent-color) 5% 0.075 h),
 );
 $semantics: (
   "accent": var(--blue),
@@ -22,6 +22,7 @@ $semantics: (
   "error": var(--red),
   "warning": var(--orange),
   "success": var(--green),
+  "skipped": var(--text-color-secondary),
   "destructive": var(--red),
   "build": var(--green),
   "danger": var(--red),
@@ -70,16 +71,10 @@ $semantics: (
   --background: var(--white);
 
   // Header
-  --brand-link-color: var(--secondary);
-  --header-link-color: var(--white);
-  --header-bg-classic: var(--black);
-  --header-link-bg-classic-hover: #404040;
-  --header-link-bg-classic-active: #404040;
-
-  // Breadcrumbs bar
-  --breadcrumbs-bar-background: oklch(
-    from var(--text-color) 96.8% 0.005 h / 0.8
-  );
+  --header-background: var(--background);
+  --header-border: var(--text-color-secondary);
+  --header-color: var(--text-color);
+  --header-height: 4.125rem;
 
   // App bar
   --bottom-app-bar-shadow: color-mix(
@@ -95,14 +90,8 @@ $semantics: (
     var(--success-color) 10%,
     transparent
   );
-  --alert-success-border-color: color-mix(
-    in sRGB,
-    var(--success-color) 5%,
-    transparent
-  );
   --alert-info-text-color: var(--blue);
   --alert-info-bg-color: color-mix(in sRGB, var(--blue) 10%, transparent);
-  --alert-info-border-color: color-mix(in sRGB, var(--blue) 5%, transparent);
   --alert-warning-text-color: color-mix(
     in sRGB,
     var(--warning-color) 80%,
@@ -113,20 +102,10 @@ $semantics: (
     var(--warning-color) 10%,
     transparent
   );
-  --alert-warning-border-color: color-mix(
-    in sRGB,
-    var(--warning-color) 5%,
-    transparent
-  );
   --alert-danger-text-color: var(--error-color);
   --alert-danger-bg-color: color-mix(
     in sRGB,
     var(--error-color) 10%,
-    transparent
-  );
-  --alert-danger-border-color: color-mix(
-    in sRGB,
-    var(--error-color) 5%,
     transparent
   );
 
@@ -137,14 +116,15 @@ $semantics: (
   --jenkins-border-width: 1.5px;
   --jenkins-border-color: color-mix(
     in sRGB,
-    var(--text-color-secondary) 12%,
+    var(--text-color-secondary) 15%,
     var(--card-background)
   );
   --jenkins-border-color--subtle: color-mix(
     in sRGB,
-    currentColor 1.5%,
+    var(--text-color) 2%,
     transparent
   );
+  --jenkins-border-color--inherit-subtle: oklch(from currentColor l c h / 0.06);
 
   /* This is a harsher border - for dividers, content blocks and more */
   --jenkins-border: var(--jenkins-border-width) solid
@@ -153,7 +133,9 @@ $semantics: (
   /* This is a subtle border - for increasing contrast on elements, such as buttons, menu and more */
   --jenkins-border--subtle: var(--jenkins-border-width) solid
     var(--jenkins-border-color--subtle);
-  --jenkins-border--subtle-shadow: 0 0 0 1.5px
+  --jenkins-border--inherit-subtle: var(--jenkins-border-width) solid
+    var(--jenkins-border-color--inherit-subtle);
+  --jenkins-border--subtle-shadow: 0 0 0 var(--jenkins-border-width)
     var(--jenkins-border-color--subtle);
 
   @media (resolution <= 1x) {
@@ -161,9 +143,11 @@ $semantics: (
   }
 
   @media (prefers-contrast: more) {
+    --header-border: var(--text-color);
     --focus-input-border: var(--text-color);
     --jenkins-border-color: var(--text-color);
     --jenkins-border-color--subtle: var(--text-color);
+    --jenkins-border-color--inherit-subtle: var(--text-color);
   }
 
   // Table
@@ -196,42 +180,34 @@ $semantics: (
   --link-text-decoration--active: underline;
   --link-font-weight: var(--font-bold-weight);
 
-  // Command Palette
-  --command-palette-results-backdrop-filter: contrast(0.7) brightness(1.5)
-    saturate(1.4) blur(20px);
-  --command-palette-inset-shadow:
-    inset 0 0 2px 2px rgb(255 255 255 / 0.1),
-    var(--jenkins-border--subtle-shadow);
-
-  ::backdrop {
-    --command-palette-backdrop-background: radial-gradient(
-      farthest-corner at 50% 30vh,
-      rgb(0 0 0 / 0.3),
-      rgb(0 0 0 / 0.1)
-    );
-  }
-
   // Tooltips
-  --tooltip-backdrop-filter: saturate(2) blur(20px);
+  --tooltip-backdrop-filter: contrast(1.1) saturate(2) blur(20px);
   --tooltip-color: var(--text-color);
   --tooltip-box-shadow:
     0 0 8px 2px rgb(0 0 50 / 0.05), var(--jenkins-border--subtle-shadow),
-    0 10px 50px rgb(0 0 20 / 0.1);
+    0 10px 50px rgb(0 0 20 / 0.1), inset 0 -1px 2px rgb(255 255 255 / 0.025);
 
   // Dropdowns
-  --dropdown-backdrop-filter: saturate(1.5) blur(20px);
+  --dropdown-backdrop-filter: contrast(1.1) saturate(2) blur(20px);
   --dropdown-box-shadow:
     var(--jenkins-border--subtle-shadow), 0 10px 30px rgb(0 0 20 / 0.1),
     0 2px 10px rgb(0 0 20 / 0.05), inset 0 -1px 2px rgb(255 255 255 / 0.025);
 
   // Dialogs
-  ::backdrop {
-    --dialog-backdrop-background: hsl(240 10% 20% / 0.8);
-  }
-
+  --dialog-background: var(--card-background);
   --dialog-box-shadow:
-    var(--jenkins-border--subtle-shadow), 0 10px 40px rgb(0 0 20 / 0.15),
-    0 2px 15px rgb(0 0 20 / 0.05), inset 0 0 2px 2px rgb(255 255 255 / 0.025);
+    var(--jenkins-border--subtle-shadow), 0 5px 25px rgb(0 0 10 / 0.025),
+    0 0 1.5px color-mix(in sRGB, var(--black) 20%, transparent),
+    inset 0 0 0 1px rgb(255 255 255 / 0.05);
+
+  ::backdrop {
+    --dialog-backdrop-backdrop-filter: blur(0.25px);
+    --dialog-backdrop-background: color-mix(
+      in sRGB,
+      var(--black) 10%,
+      color-mix(in sRGB, var(--background) 55%, transparent)
+    );
+  }
 
   // Dark link
   --link-dark-color: var(--text-color);
@@ -309,7 +285,6 @@ $semantics: (
     var(--text-color-secondary) 50%,
     transparent
   );
-  --input-hidden-password-bg-color: #f9f9f9;
   --form-item-max-width: min(65vw, 1600px);
   --form-item-max-width--medium: min(50vw, 1400px);
   --form-item-max-width--small: min(35vw, 1200px);
@@ -338,7 +313,7 @@ $semantics: (
   }
 
   // Animations
-  --standard-transition: 0.3s ease;
+  --standard-transition: 0.25s ease;
   --elastic-transition: 0.3s cubic-bezier(0, 0.68, 0.5, 1.5);
 
   // Plugin manager

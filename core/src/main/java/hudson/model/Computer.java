@@ -89,6 +89,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -112,6 +113,7 @@ import jenkins.model.DisplayExecutor;
 import jenkins.model.IComputer;
 import jenkins.model.IDisplayExecutor;
 import jenkins.model.Jenkins;
+import jenkins.search.SearchGroup;
 import jenkins.security.ExtendedReadRedaction;
 import jenkins.security.ImpersonatingExecutorService;
 import jenkins.security.MasterToSlaveCallable;
@@ -780,7 +782,7 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
     }
 
     public RunList getBuilds() {
-        return RunList.fromJobs((Iterable) Jenkins.get().allItems(Job.class)).node(getNode());
+        return RunList.fromJobs((Iterable) Jenkins.get().allItems(AbstractProject.class)).node(getNode());
     }
 
     /**
@@ -798,7 +800,7 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
     }
 
     /**
-     * Called by {@link Jenkins#updateComputerList()} to notify {@link Computer} that it will be discarded.
+     * Called by {@link Jenkins#updateComputerList(boolean, Collection)} to notify {@link Computer} that it will be discarded.
      *
      * <p>
      * Note that at this point {@link #getNode()} returns null.
@@ -813,7 +815,7 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
     }
 
     /**
-     * Called by {@link Jenkins#updateComputerList()} to notify {@link Computer} that it will be discarded.
+     * Called by {@link Jenkins#updateComputerList(boolean, Collection)} to notify {@link Computer} that it will be discarded.
      *
      * <p>
      * Note that at this point {@link #getNode()} returns null.
@@ -1110,6 +1112,11 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
     @Override
     public String getSearchUrl() {
         return getUrl();
+    }
+
+    @Override
+    public SearchGroup getSearchGroup() {
+        return SearchGroup.get(SearchGroup.ComputerSearchGroup.class);
     }
 
     /**
@@ -1676,6 +1683,7 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
         relocateOldLogs(Jenkins.get().getRootDir());
     }
 
+    @SuppressFBWarnings(value = "REDOS", justification = "TODO needs triage")
     /*package*/ static void relocateOldLogs(File dir) {
         final Pattern logfile = Pattern.compile("slave-(.*)\\.log(\\.[0-9]+)?");
         File[] logfiles = dir.listFiles((dir1, name) -> logfile.matcher(name).matches());
